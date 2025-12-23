@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&family=Quicksand:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0d0d0d;
+            letter-spacing: 0.01em;
+        }
+
+        .font-timer {
+            font-family: 'Quicksand', sans-serif;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .time-block {
+            display: inline-block;
+            width: 1.3em;
+            text-align: center;
+        }
+
+        .colon {
+            display: inline-block;
+            width: 0.3em;
+            text-align: center;
+            opacity: 0.3;
+        }
+
+        #main-display,
+        #fs-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .tab-active {
+            color: #00d4ff;
+            border-bottom: 2px solid #00d4ff;
+        }
+
+        .tab-button {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 10px;
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            #fs-display {
+                font-size: 35vh !important;
+                margin-bottom: 0;
+            }
+
+            #fs-label {
+                font-size: 10px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 min-h-screen flex flex-col">
+
+    <div
+        class="fixed top-5 right-5 z-50 bg-[#1a1a1a]/60 backdrop-blur-lg border border-[#2a2a2a] rounded-xl px-4 py-2 text-sm font-medium text-[#00d4ff] font-timer hidden md:block">
+        <span id="clock">12:00:00 AM</span>
+    </div>
+
+    <div class="container mx-auto px-6 md:px-4 py-10 flex-grow flex flex-col items-center justify-center max-w-4xl">
+        <header class="text-center mb-10">
+            <h1
+                class="text-5xl font-bold tracking-tight mb-2 bg-gradient-to-r from-[#00d4ff] to-[#00ff88] bg-clip-text text-transparent">
+                Study Timer</h1>
+            <p class="text-[10px] text-gray-500 uppercase tracking-[0.4em]">Focus • Learn • Achieve</p>
+        </header>
+
+        <nav class="flex gap-8 mb-12 border-b border-[#2a2a2a] w-full justify-center px-4 md:px-0">
+            <button
+                class="tab-button active pb-3 px-4 text-sm font-semibold uppercase tracking-wider tab-active transition-all"
+                data-tab="pomodoro">Pomodoro</button>
+            <button
+                class="tab-button pb-3 px-4 text-sm font-semibold uppercase tracking-wider text-gray-500 hover:text-gray-200 transition-all"
+                data-tab="stopwatch">Stopwatch</button>
+            <button
+                class="tab-button pb-3 px-4 text-sm font-semibold uppercase tracking-wider text-gray-500 hover:text-gray-200 transition-all"
+                data-tab="clock">Clock</button>
+        </nav>
+
+        <div class="w-full flex flex-col items-center">
+            <div id="mode-label" class="text-[#00ff88] text-[11px] font-bold tracking-[0.3em] mb-4 uppercase">Focus
+                Session</div>
+
+            <div id="main-display"
+                class="font-timer font-bold text-[#00d4ff] leading-none mb-10 transition-all duration-300"
+                style="font-size: min(18vw, 160px);">
+                25:00
+            </div>
+
+            <div id="settings-area" class="flex items-center justify-center gap-6 mb-12">
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <button id="main-toggle"
+                    class="bg-[#00d4ff] text-black px-12 py-3.5 rounded-xl font-bold uppercase text-sm hover:brightness-110 active:scale-95 transition-all w-40 shadow-lg shadow-[#00d4ff]/20">Start</button>
+                <button id="main-reset"
+                    class="bg-[#1a1a1a] border border-[#2a2a2a] px-10 py-3.5 rounded-xl font-bold uppercase text-sm hover:bg-[#252525] transition-all">Reset</button>
+                <button id="main-fullscreen"
+                    class="bg-transparent border border-[#2a2a2a] text-gray-500 px-8 py-3.5 rounded-xl font-bold uppercase text-sm hover:text-white hover:border-gray-400 transition-all">⛶
+                    Fullscreen</button>
+            </div>
+        </div>
+
+        <p class="mt-14 text-[9px] text-gray-600 uppercase tracking-[0.3em]">💡 Space: Toggle • R: Reset • F: Fullscreen
+        </p>
+    </div>
+
+    <div id="fullscreen-overlay"
+        class="fixed inset-0 bg-[#0d0d0d] flex flex-col items-center justify-center z-[100] hidden">
+        <div id="fs-label" class="text-[#00ff88] text-sm font-bold tracking-[0.5em] mb-8 uppercase opacity-50">FOCUS
+        </div>
+        <div id="fs-display" class="font-timer font-bold text-[#00d4ff] leading-none text-[28vw]">25:00</div>
+    </div>
+
+    <footer class="border-t dark:border-zinc-600 py-4 sm:py-8 px-4 transition-colors duration-200">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 items-center gap-3 sm:gap-6">
+
+            <div class="hidden sm:block"></div>
+
+            <p class="text-zinc-600 dark:text-gray-400 text-xs sm:text-sm text-center whitespace-nowrap">
+                &copy; 2025 Ahnaf Tajwar Suchak. All rights reserved.
+            </p>
+
+            <div class="flex justify-center sm:justify-end items-center space-x-5 sm:space-x-6">
+                <a target="_blank" href="https://github.com/atsuchak"
+                    class="text-zinc-500 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                    title="GitHub">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="sm:w-6 sm:h-6">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                        </path>
+                    </svg>
+                </a>
+
+                <a target="_blank" href="https://www.linkedin.com/in/atsuchak/"
+                    class="text-zinc-500 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                    title="LinkedIn">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="sm:w-6 sm:h-6">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                </a>
+
+                <a target="_blank" href="mailto:ahnaftajwarsuchak@gmail.com"
+                    class="text-zinc-500 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                    title="Email">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="sm:w-6 sm:h-6">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </a>
+
+                <a target="_blank" href="https://atsuchak.me"
+                    class="text-zinc-500 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+                    title="Portfolio">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="sm:w-6 sm:h-6">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
