@@ -349,47 +349,47 @@ async function toggleFS() {
 
 
 
-/**
- * TEST UTILITY: Fast Test Button
- * Delete this entire function and its call when finished.
- */
-function enableFastTestMode() {
-    // 1. Create the button element
-    const testBtn = document.createElement('button');
-    testBtn.id = "temp-test-btn";
-    testBtn.innerHTML = "TEST 5S";
+// /**
+//  * TEST UTILITY: Fast Test Button
+//  * Delete this entire function and its call when finished.
+//  */
+// function enableFastTestMode() {
+//     // 1. Create the button element
+//     const testBtn = document.createElement('button');
+//     testBtn.id = "temp-test-btn";
+//     testBtn.innerHTML = "TEST 5S";
 
-    // 2. Style it to float in the corner so it doesn't mess up your UI
-    Object.assign(testBtn.style, {
-        position: 'fixed',
-        bottom: '20px',
-        left: '20px',
-        padding: '10px 15px',
-        background: 'rgba(239, 68, 68, 0.2)',
-        color: '#ef4444',
-        border: '1px solid #ef4444',
-        borderRadius: '8px',
-        fontSize: '10px',
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        zIndex: '9999'
-    });
+//     // 2. Style it to float in the corner so it doesn't mess up your UI
+//     Object.assign(testBtn.style, {
+//         position: 'fixed',
+//         bottom: '20px',
+//         left: '20px',
+//         padding: '10px 15px',
+//         background: 'rgba(239, 68, 68, 0.2)',
+//         color: '#ef4444',
+//         border: '1px solid #ef4444',
+//         borderRadius: '8px',
+//         fontSize: '10px',
+//         fontWeight: 'bold',
+//         cursor: 'pointer',
+//         zIndex: '9999'
+//     });
 
-    // 3. Add the logic
-    testBtn.onclick = () => {
-        if (state.currentTab === 'pomodoro') {
-            state.pomodoro.remaining = 5;
-            state.pomodoro.isFinished = false;
-            updateUI();
-            console.log("Test Mode: Timer set to 5 seconds");
-        } else {
-            alert("Please switch to Pomodoro tab to test!");
-        }
-    };
+//     // 3. Add the logic
+//     testBtn.onclick = () => {
+//         if (state.currentTab === 'pomodoro') {
+//             state.pomodoro.remaining = 5;
+//             state.pomodoro.isFinished = false;
+//             updateUI();
+//             console.log("Test Mode: Timer set to 5 seconds");
+//         } else {
+//             alert("Please switch to Pomodoro tab to test!");
+//         }
+//     };
 
-    document.body.appendChild(testBtn);
-}
-enableFastTestMode();
+//     document.body.appendChild(testBtn);
+// }
+// enableFastTestMode();
 
 
 
